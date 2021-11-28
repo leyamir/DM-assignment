@@ -34,8 +34,8 @@ int** create_matrix(int x, int k) {                     //create distance matrix
 
 int main() {
     int x, y, m, n, k;
-    std::cin >> x >> y >> m >> n >> k;                         //x,y is number of vertexs and edges respectively. m,n is initial and terminal vertex. k is kth shortest path
-    
+    std::cin >> x >> y >> m >> n;                         //x,y is number of vertexs and edges respectively. m,n is initial and terminal vertex. k is kth shortest path
+    k = 10;
     std::vector <int2> *map = new std::vector <int2> [x + 1];  //create pointer to array (mean that there is a array of vector)
     
     read_map(map, y, x);
