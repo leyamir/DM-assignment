@@ -34,8 +34,7 @@ int** create_matrix(int x, int k) {                     //create distance matrix
 
 int main() {
     int x, y, m, n, k;
-    std::cin >> x >> y >> m >> n;                         //x,y is number of vertexs and edges respectively. m,n is initial and terminal vertex. k is kth shortest path
-    k = 10;
+    std::cin >> x >> y >> m >> n >> k;                         //x,y is number of vertexs and edges respectively. m,n is initial and terminal vertex. k is kth shortest path
     std::vector <int2> *map = new std::vector <int2> [x + 1];  //create pointer to array (mean that there is a array of vector)
     
     read_map(map, y, x);
@@ -61,5 +60,10 @@ int main() {
     for(int i = 0; i < k; i++) {
         std::cout << ptr_distance[n][i] << " ";                //print list of shortest distance to our terminal vertex in increasing order
     }
+    if(ptr_distance[n][k] == MAX) {
+        std::cout << std::endl << "There does not exist kth shortest path !";
+        return 0;
+    }
+    std::cout << std::endl << "The result: " << ptr_distance[n][k - 1];
     return 0;
 }

@@ -107,30 +107,32 @@ int*** create_matrix(int e, int x, int k) {                     //create distanc
     return _distance;
 }
 std::vector <int> or_operator_(int** _ptr_distance, int*** ptr, int e, int size, int n) {
-    std::vector <int> res;
-    std::vector <int> merge;
-    for(int _e = 0; _e < e; _e++)
-        for(int i = 0; i < size; i++) {
-            if(ptr[_e][n][i] != MAX)
-                merge.push_back(ptr[_e][n][i]);
-        }
-    std::sort(merge.begin(), merge.end());
-    int a = 0,b = 0;
-    while(a != size && b != merge.size()){
-        if(_ptr_distance[n][a] == merge[b]){
-            a++;
-            b++;
-            continue;
-        }
-        if(_ptr_distance[n][a] < merge[b]){
-            res.push_back(_ptr_distance[n][a]);
-            a++;
-        }
-        else {
-            b++;
-        }
+    std::vector <int> _ptr;
+    for(int i = 0; i < size; i++) {
+        _ptr.push_back(_ptr_distance[n][i]);
     }
-    return res;
+    std::vector <int> temp;
+    for(int _e = 0; _e < e; _e++) {
+        int b = 0, z = 0;
+        temp.clear();
+        while(z < _ptr.size() && b < size) {
+            if(_ptr[z] == MAX) break;
+            if(_ptr[z] == ptr[_e][n][b]){
+                z++;
+                b++;
+                continue;
+            }
+            if(_ptr[z] < ptr[_e][n][b]) {
+                temp.push_back(_ptr[z]);
+                z++;
+            }
+            else {
+                b++;
+            }
+        }
+        _ptr = temp;
+    }
+    return _ptr;
 }
 int main() {
     int x, y, m, n, k, e;
@@ -146,7 +148,7 @@ int main() {
     int** ptr_distance = create_matrix(x, k);
     int _k = 0;
     do {
-        _k += 1;
+        _k += 300;
         int*** ptr_distance_storing = create_matrix(e, x, _k);
         int** ptr_distance = create_matrix(x, _k);
         shortestkth(ptr_distance, map, m, _k);
@@ -163,16 +165,23 @@ int main() {
             map[mandatory_edge[u][0]].push_back(int2(0, 0));
         }
         result = or_operator_(ptr_distance, ptr_distance_storing, e, _k, n);
-        if(result.size() == k) break;
+        if(result.size() >= k) break;
         cleanup_matrix(ptr_distance_storing, x, _k, e);
         reset_matrix(ptr_distance, x, _k);
     }
     while(result.size() != k);
     auto end = std::chrono::steady_clock::now();
     auto diff = end - start;
-    std::cout << std::chrono::duration <double, std::nano> (diff).count() << " ns" << std::endl;
+    auto time = std::chrono::duration <double> (diff).count();
+    if(time > 5.0) {
+        std::cout<<"Timed out, meaning can not find kth shortest path or the result met the our limitation !";
+        return 0;
+    }
+    std::cout <<"Executation time: "<< std::chrono::duration <double, std::nano> (diff).count() << " ns" << std::endl;
     for(int i = 0; i < k; i++) {
         std::cout << result[i] << " ";                //print list of shortest distance to our terminal vertex in increasing order
     }
+    std::cout<<std::endl;
+    std::cout<<"The result: "<<result[k];
     return 0;
 }
