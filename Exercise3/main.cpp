@@ -182,6 +182,6 @@ int main() {
         std::cout << result[i] << " ";                //print list of shortest distance to our terminal vertex in increasing order
     }
     std::cout<<std::endl;
-    std::cout<<"The result: "<<result[k];
+    std::cout<<"The result: "<<result[k - 1];
     return 0;
 }
